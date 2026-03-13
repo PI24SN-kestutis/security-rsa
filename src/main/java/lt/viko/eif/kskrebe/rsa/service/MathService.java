@@ -1,6 +1,7 @@
 package lt.viko.eif.kskrebe.rsa.service;
 
 import java.math.BigInteger;
+import lt.viko.eif.kskrebe.rsa.model.ExtendedGcdResult;
 
 /**
  * Klasė, atsakinga už matematines operacijas,
@@ -79,5 +80,40 @@ public class MathService {
         }
         //kai b = 0, a - didžiausias bendras daliklis
         return a;
+    }
+
+    /**
+     * Apskaičiuoja išplėstinio Euklido algoritmo rezultatą.
+     *
+     * <p>Grąžina ne tik didžiausią bendrą daliklį, bet ir
+     * koeficientus x ir y, kad galiotų Bezout tapatybė:</p>
+     *
+     * <pre>
+     * a*x + b*y = gcd(a, b)
+     * </pre>
+     *
+     * <p>Šis metodas RSA algoritme naudojamas modulinio inverso
+     * radimui, kai reikia apskaičiuoti privatų eksponentą d.</p>
+     *
+     * @param a pirmas skaičius
+     * @param b antras skaičius
+     * @return objektas, kuriame yra gcd, x ir y
+     */
+    public ExtendedGcdResult extendedGcd(BigInteger a, BigInteger b) {
+        //Kai b = 0, turime: a*1+0*0=a
+        if (b.equals(BigInteger.ZERO)) {
+            return new ExtendedGcdResult(a, BigInteger.ONE, BigInteger.ZERO);
+        }
+        //pagal formulę: extendedGcd(a,b)→extendedGcd(b,a mod b)
+        ExtendedGcdResult nextResult = extendedGcd(b, a.mod(b));
+
+        BigInteger gcd = nextResult.getGcd();
+        BigInteger x1 = nextResult.getX();
+        BigInteger y1 = nextResult.getY();
+
+        BigInteger x = y1;
+        BigInteger y = x1.subtract(a.divide(b).multiply(y1));
+
+        return new ExtendedGcdResult(gcd, x, y);
     }
 }

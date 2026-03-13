@@ -1,5 +1,6 @@
 package lt.viko.eif.kskrebe.rsa.service;
 
+import lt.viko.eif.kskrebe.rsa.model.ExtendedGcdResult;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -58,4 +59,24 @@ class MathServiceTest {
         assertEquals(BigInteger.valueOf(7),
                 mathService.gcd(BigInteger.valueOf(0), BigInteger.valueOf(7)));
     }
+
+
+    /**
+     * Testuojama sąlyga: a*x+b*y=gcd(a,b)
+     */
+    @Test
+    void shouldReturnExtendedGcdResult() {
+        ExtendedGcdResult result = mathService.extendedGcd(
+                BigInteger.valueOf(17),
+                BigInteger.valueOf(3120)
+        );
+
+        assertEquals(BigInteger.ONE, result.getGcd());
+
+        BigInteger leftSide = BigInteger.valueOf(17).multiply(result.getX())
+                .add(BigInteger.valueOf(3120).multiply(result.getY()));
+
+        assertEquals(BigInteger.ONE, leftSide);
+    }
+
 }
