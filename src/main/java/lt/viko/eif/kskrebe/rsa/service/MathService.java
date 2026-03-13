@@ -50,4 +50,34 @@ public class MathService {
 
         return true;
     }
+
+    /**
+     * Apskaičiuoja dviejų skaičių didžiausią bendrą daliklį
+     * naudodamas Euklido algoritmą.
+     *
+     * <p>Algoritmo esmė:</p>
+     * <pre>
+     * gcd(a, b) = gcd(b, a mod b)
+     * </pre>
+     *
+     * <p>Kai {@code b = 0}, rezultatas yra {@code a}.</p>
+     *
+     * @param a pirmas skaičius
+     * @param b antras skaičius
+     * @return didžiausias bendras daliklis
+     */
+    public BigInteger gcd(BigInteger a, BigInteger b) {
+        //absoliučios reikšmės
+        a = a.abs();
+        b = b.abs();
+        //kol b nėra 0(nulis)
+        while (!b.equals(BigInteger.ZERO)) {
+            BigInteger remainder = a.mod(b); //liekana
+            // poros perstūmimas
+            a = b;
+            b = remainder;
+        }
+        //kai b = 0, a - didžiausias bendras daliklis
+        return a;
+    }
 }

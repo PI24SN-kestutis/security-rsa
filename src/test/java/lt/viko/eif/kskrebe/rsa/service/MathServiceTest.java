@@ -41,4 +41,21 @@ class MathServiceTest {
 
     }
 
+    /**
+     * Testuoja didžiausio bendro daliklio skaičiavimą.
+     */
+    @Test
+    void shouldReturnGreatestCommonDivisor() {
+        assertEquals(BigInteger.valueOf(6),
+                mathService.gcd(BigInteger.valueOf(48), BigInteger.valueOf(18)));
+
+        assertEquals(BigInteger.ONE,
+                mathService.gcd(BigInteger.valueOf(17), BigInteger.valueOf(3120)));
+
+        assertEquals(BigInteger.valueOf(10),
+                mathService.gcd(BigInteger.valueOf(100), BigInteger.valueOf(90)));
+
+        assertEquals(BigInteger.valueOf(7),
+                mathService.gcd(BigInteger.valueOf(0), BigInteger.valueOf(7)));
+    }
 }
