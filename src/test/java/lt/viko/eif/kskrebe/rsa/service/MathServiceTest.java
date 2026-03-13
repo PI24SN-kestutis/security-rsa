@@ -79,4 +79,21 @@ class MathServiceTest {
         assertEquals(BigInteger.ONE, leftSide);
     }
 
+    @Test
+    void shouldFindValidPublicExponent() {
+        BigInteger phi = BigInteger.valueOf(3120);
+
+        BigInteger e = mathService.findPublicExponent(phi);
+
+        assertTrue(e.compareTo(BigInteger.ONE) > 0);
+        assertTrue(e.compareTo(phi) < 0);
+        assertEquals(BigInteger.ONE, mathService.gcd(e, phi));
+    }
+
+    @Test //blogam įvedimui testas
+    void shouldThrowExceptionWhenPhiIsTooSmall() {
+        assertThrows(IllegalArgumentException.class,
+                () -> mathService.findPublicExponent(BigInteger.TWO));
+    }
+
 }

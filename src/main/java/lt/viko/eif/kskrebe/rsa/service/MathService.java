@@ -116,4 +116,40 @@ public class MathService {
 
         return new ExtendedGcdResult(gcd, x, y);
     }
+
+
+    /**
+     * Suranda tinkamą viešąjį eksponentą e RSA algoritmui.
+     *
+     * <p>Viešasis eksponentas turi tenkinti šias sąlygas:</p>
+     * <ul>
+     *     <li>1 < e < phi</li>
+     *     <li>gcd(e, phi) = 1</li>
+     * </ul>
+     *
+     * <p>Metodas pradeda paiešką nuo 3 ir nuosekliai ieško
+     * pirmo tinkamo skaičiaus.</p>
+     *
+     * @param phi Euler funkcijos reikšmė
+     * @return tinkamas viešasis eksponentas e
+     * @throws IllegalArgumentException jei phi yra per mažas
+     * @throws IllegalStateException jei nepavyksta rasti tinkamo e
+     */
+    public BigInteger findPublicExponent(BigInteger phi) {
+        if (phi.compareTo(BigInteger.TWO) <= 0) {
+            throw new IllegalArgumentException("Phi turi būti didesnis už 2.");
+        }
+
+        BigInteger e = BigInteger.valueOf(3);
+
+        while (e.compareTo(phi) < 0) {
+            if (gcd(e, phi).equals(BigInteger.ONE)) {
+                return e;
+            }
+
+            e = e.add(BigInteger.ONE);
+        }
+
+        throw new IllegalStateException("Nepavyko rasti galiojančio viešojo laipsnio rodiklio e.");
+    }
 }
