@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <javafx.version>21.0.2</javafx.version>
+        <javafx.version>21.0.6</javafx.version>
         <junit.version>5.12.1</junit.version>
     </properties>
 
@@ -55,6 +55,14 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
+                <configuration>
+                    <argLine>-Xms64m -Xmx256m</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
@@ -64,6 +72,10 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>lt.viko.eif.kskrebe.rsa/lt.viko.eif.kskrebe.rsa.MainApp</mainClass>
+                            <options>
+                                <option>-Xms64m</option>
+                                <option>-Xmx256m</option>
+                            </options>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
