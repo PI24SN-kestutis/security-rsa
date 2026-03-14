@@ -1,6 +1,7 @@
 package lt.viko.eif.kskrebe.rsa.service;
 
 import lt.viko.eif.kskrebe.rsa.model.ExtendedGcdResult;
+import lt.viko.eif.kskrebe.rsa.model.PrimeFactors;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -119,6 +120,24 @@ class MathServiceTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> mathService.findPrivateExponent(e, phi));
+    }
+
+    @Test //RSA matematinei atakai testas
+    void shouldFactorizeNIntoPrimeFactors() {
+        // kai p = 61; q = 53
+        PrimeFactors factors = mathService.factorizeN(BigInteger.valueOf(3233));
+
+        BigInteger product = factors.getP().multiply(factors.getQ());
+
+        assertEquals(BigInteger.valueOf(3233), product);
+        assertTrue(mathService.isPrime(factors.getP()));
+        assertTrue(mathService.isPrime(factors.getQ()));
+    }
+
+    @Test //blogam atvejui testas
+    void shouldThrowExceptionWhenNIsTooSmall() {
+        assertThrows(IllegalArgumentException.class,
+                () -> mathService.factorizeN(BigInteger.TWO));
     }
 
 }

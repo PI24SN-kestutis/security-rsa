@@ -2,6 +2,7 @@ package lt.viko.eif.kskrebe.rsa.service;
 
 import java.math.BigInteger;
 import lt.viko.eif.kskrebe.rsa.model.ExtendedGcdResult;
+import lt.viko.eif.kskrebe.rsa.model.PrimeFactors;
 
 /**
  * Klasė, atsakinga už matematines operacijas,
@@ -188,5 +189,42 @@ public class MathService {
 
         //d=x mod phi
         return x.mod(phi);
+    }
+
+    /**
+     * Bando išskaidyti n į du pirminius faktorius p ir q.
+     *
+     * <p>Šis metodas naudoja paprastą trial division principą:
+     * tikrina daliklius nuo 2 iki √n.</p>
+     *
+     * <p>Metodas skirtas mokomajai RSA atakai, kai n yra pakankamai mažas,
+     * kad faktorizacija būtų praktiškai įmanoma.</p>
+     *
+     * @param n RSA modulis
+     * @return rasti pirminiai faktoriai p ir q
+     * @throws IllegalArgumentException jei n yra per mažas
+     * @throws IllegalStateException jei nepavyksta rasti dviejų pirminių faktorių
+     */
+    public PrimeFactors factorizeN(BigInteger n) {
+        if (n.compareTo(BigInteger.TWO) <= 0) {
+            throw new IllegalArgumentException("turi būti didesnis už 2.");
+        }
+
+        BigInteger divisor = BigInteger.TWO;
+
+        while (divisor.multiply(divisor).compareTo(n) <= 0) {
+            if (n.mod(divisor).equals(BigInteger.ZERO)) {
+                BigInteger p = divisor;
+                BigInteger q = n.divide(divisor);
+
+                if (isPrime(p) && isPrime(q)) {
+                    return new PrimeFactors(p, q);
+                }
+            }
+
+            divisor = divisor.add(BigInteger.ONE);
+        }
+
+        throw new IllegalStateException("Nepavyko suskaidyti n į du pirminius veiksnius.");
     }
 }
