@@ -4,6 +4,7 @@ import lt.viko.eif.kskrebe.rsa.model.RsaKeyPair;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,5 +28,33 @@ class RsaServiceTest {
                         .mod(keys.getPhi());
 
         assertEquals(BigInteger.ONE, result);
+    }
+
+    @Test
+    void shouldEncryptText() {
+        RsaKeyPair keys = rsaService.generateKeys(
+                BigInteger.valueOf(61),
+                BigInteger.valueOf(53)
+        );
+
+        List<BigInteger> encrypted = rsaService.encrypt("A", keys.getE(), keys.getN());
+
+        //ar yra rezultatas
+        assertNotNull(encrypted);
+        //ar simbolis duoda vieną reikšmę
+        assertEquals(1, encrypted.size());
+        //patikrina ar nėra reikšmė lygi užšifruotai reikšmei
+        assertNotEquals(BigInteger.valueOf((int) 'A'), encrypted.get(0));
+    }
+
+    @Test //testas tuščiam tekstui
+    void shouldThrowExceptionWhenPlainTextIsEmpty() {
+        RsaKeyPair keys = rsaService.generateKeys(
+                BigInteger.valueOf(61),
+                BigInteger.valueOf(53)
+        );
+
+        assertThrows(IllegalArgumentException.class,
+                () -> rsaService.encrypt("", keys.getE(), keys.getN()));
     }
 }

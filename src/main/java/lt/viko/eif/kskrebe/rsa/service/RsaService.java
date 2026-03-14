@@ -3,6 +3,8 @@ package lt.viko.eif.kskrebe.rsa.service;
 import lt.viko.eif.kskrebe.rsa.model.RsaKeyPair;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * RSA logikos klasė.
@@ -40,6 +42,46 @@ public class RsaService {
         BigInteger d = mathService.findPrivateExponent(e, phi);
 
         return new RsaKeyPair(p, q, n, phi, e, d);
+    }
+
+    /**
+     * Užšifruoja tekstą RSA algoritmu, šifruodamas kiekvieną simbolį atskirai.
+     *
+     * <p>Kiekvienas simbolis paverčiamas į skaitinę Unicode reikšmę,
+     * tada pritaikoma formulė:</p>
+     *
+     * <pre>
+     * C = M^e mod n
+     * </pre>
+     *
+     * @param plainText pradinis tekstas
+     * @param e viešoji eksponentė
+     * @param n RSA modulis
+     * @return užšifruotų skaičių sąrašas
+     * @throws IllegalArgumentException jei tekstas tuščias arba simbolio kodas nėra mažesnis už n
+     */
+    public List<BigInteger> encrypt(String plainText, BigInteger e, BigInteger n) {
+        if (plainText == null || plainText.isBlank()) {
+            throw new IllegalArgumentException("Laukas negali būti tuščias.");
+        }
+
+        List<BigInteger> encryptedValues = new ArrayList<>();
+
+        for (char character : plainText.toCharArray()) {
+            BigInteger messageValue = BigInteger.valueOf(character);
+
+            if (messageValue.compareTo(n) >= 0) {
+                throw new IllegalArgumentException(
+                        "Simbolio kodas turi būti mažesnis nei n.: " + character
+                );
+            }
+
+            //C=M^e mod n
+            BigInteger encryptedValue = messageValue.modPow(e, n);
+            encryptedValues.add(encryptedValue);
+        }
+
+        return encryptedValues;
     }
 
 }
