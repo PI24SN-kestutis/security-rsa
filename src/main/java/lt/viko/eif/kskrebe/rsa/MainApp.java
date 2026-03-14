@@ -25,7 +25,7 @@ public class MainApp extends Application {
                 MainApp.class.getResource("rsa-view.fxml")
         );
 
-        Scene scene = new Scene(fxmlLoader.load(), 900, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 900, 1040);
 
         stage.setTitle("RSA Encryption and Decryption System");
         stage.setScene(scene);

@@ -53,7 +53,7 @@
                            promptText="Pvz., 53"
                            GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
-                <Label text="Pastaba: tinka tik pirminiai skaičiai, pavyzdžiui 11, 13, 17, 19, 23, 29, 31, 53, 61. /n štai du, dideli, pirminiai skaičiai: 32416190071 ir 32416187567."
+                <Label text="Pastaba: tinka tik pirminiai skaičiai, pavyzdžiui 11, 13, 17, 19, 23, 29, 31, 53, 61.&#10;Pavyzdiniai didesni pirminiai skaičiai: 32416190071 ir 32416187567."
                        wrapText="true"
                        GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
 
@@ -87,7 +87,8 @@
 
             <HBox spacing="10">
                 <Button fx:id="saveButton"
-                        text="Išsaugoti užšifruotus duomenis"/>
+                        text="Išsaugoti užšifruotus duomenis"
+                        onAction="#handleSaveEncryptedData"/>
             </HBox>
 
             <Label text="Sugeneruoti RSA duomenys"
@@ -135,9 +136,11 @@
 
             <HBox spacing="10">
                 <Button fx:id="loadButton"
-                        text="Pasirinkti užšifruotą failą"/>
+                        text="Pasirinkti užšifruotą failą"
+                        onAction="#handleLoadEncryptedData"/>
                 <Button fx:id="decryptButton"
-                        text="Dešifruoti tekstą"/>
+                        text="Dešifruoti tekstą"
+                        onAction="#handleDecrypt"/>
             </HBox>
 
             <Label text="Failo būsena:"
@@ -220,7 +223,8 @@
                         text="Atkurti privatų raktą"
                         onAction="#handleRecoverPrivateKey"/>
                 <Button fx:id="attackDecryptButton"
-                        text="Dešifruoti naudojant atkurtą raktą"/>
+                        text="Dešifruoti naudojant atkurtą raktą"
+                        onAction="#handleAttackDecrypt"/>
             </HBox>
 
             <Label text="Atakos metu atkurtas tekstas:"
