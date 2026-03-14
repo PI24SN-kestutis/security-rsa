@@ -1,19 +1,242 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml"
-      spacing="12"
-      alignment="CENTER">
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="lt.viko.eif.kskrebe.rsa.controller.RsaController"
+            fitToWidth="true">
 
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
+    <content>
+        <VBox spacing="16">
 
-    <Label text="RSA Encryption and Decryption System"/>
-    <Label text="B level project - JavaFX skeleton is ready."/>
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
 
-</VBox>
+            <Label text="RSA demonstravimo sistema su matematine RSA ataka"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+
+            <Label text="Programa leidžia užšifruoti tekstą, išsaugoti užšifruotus duomenis, juos nuskaityti ir parodyti, kaip mažas RSA raktas gali būti atkurtas matematine ataka."
+                   wrapText="true"
+                   style="-fx-font-size: 13px;"/>
+
+            <Separator/>
+
+            <!-- 1. TEKSTO ŠIFRAVIMAS -->
+            <Label text="1. Teksto šifravimas"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <Label text="Įveskite du pirminius skaičius p ir q. Jie naudojami RSA rakto sudarymui."
+                   wrapText="true"/>
+
+            <GridPane hgap="10" vgap="10">
+
+                <Label text="Pirminis skaičius p:"
+                       GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="pField"
+                           promptText="Pvz., 61"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Pirminis skaičius q:"
+                       GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                <TextField fx:id="qField"
+                           promptText="Pvz., 53"
+                           GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                <Label text="Pastaba: tinka tik pirminiai skaičiai, pavyzdžiui 11, 13, 17, 19, 23, 29, 31, 53, 61. /n štai du, dideli, pirminiai skaičiai: 32416190071 ir 32416187567."
+                       wrapText="true"
+                       GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
+
+            </GridPane>
+
+            <Label text="Pradinis tekstas:"
+                   style="-fx-font-weight: bold;"/>
+            <Label text="Įveskite tekstą, kurį norite užšifruoti."
+                   wrapText="true"/>
+
+            <TextArea fx:id="plainTextArea"
+                      promptText="Pvz., LABAS"
+                      prefRowCount="4"
+                      wrapText="true"/>
+
+            <HBox spacing="10">
+                <Button fx:id="generateKeysAndEncryptButton"
+                        text="Generuoti raktus ir užšifruoti"
+                        onAction="#handleGenerateKeysAndEncrypt"/>
+            </HBox>
+
+            <Label text="Užšifruotas tekstas:"
+                   style="-fx-font-weight: bold;"/>
+            <Label text="Čia bus parodytos užšifruotos simbolių reikšmės."
+                   wrapText="true"/>
+
+            <TextArea fx:id="encryptedTextArea"
+                      editable="false"
+                      prefRowCount="4"
+                      wrapText="true"/>
+
+            <HBox spacing="10">
+                <Button fx:id="saveButton"
+                        text="Išsaugoti užšifruotus duomenis"/>
+            </HBox>
+
+            <Label text="Sugeneruoti RSA duomenys"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+            <Label text="Šie laukai parodo, kaip iš p ir q buvo sudaryti RSA parametrai."
+                   wrapText="true"/>
+
+            <GridPane hgap="10" vgap="10">
+
+                <Label text="Modulis n:"
+                       GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="nField"
+                           editable="false"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Euler funkcija Φ:"
+                       GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="phiField"
+                           editable="false"
+                           GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Viešasis raktas e:"
+                       GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="eField"
+                           editable="false"
+                           GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Privatus raktas d:"
+                       GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="dField"
+                           editable="false"
+                           GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            </GridPane>
+
+            <Separator/>
+
+            <!-- 2. FAILO NUSKAITYMAS IR DEŠIFRAVIMAS -->
+            <Label text="2. Failo nuskaitymas ir dešifravimas"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <Label text="Šioje dalyje galite pasirinkti anksčiau išsaugotą užšifruotą failą ir atkurti pradinį tekstą."
+                   wrapText="true"/>
+
+            <HBox spacing="10">
+                <Button fx:id="loadButton"
+                        text="Pasirinkti užšifruotą failą"/>
+                <Button fx:id="decryptButton"
+                        text="Dešifruoti tekstą"/>
+            </HBox>
+
+            <Label text="Failo būsena:"
+                   style="-fx-font-weight: bold;"/>
+            <TextField fx:id="fileStatusField"
+                       editable="false"
+                       promptText="Čia bus rodoma failo nuskaitymo būsena"/>
+
+            <Label text="Nuskaitytas užšifruotas tekstas:"
+                   style="-fx-font-weight: bold;"/>
+            <Label text="Čia matysite iš failo perskaitytas užšifruotas reikšmes."
+                   wrapText="true"/>
+
+            <TextArea fx:id="loadedEncryptedTextArea"
+                      editable="false"
+                      prefRowCount="4"
+                      wrapText="true"/>
+
+            <Label text="Dešifruotas tekstas:"
+                   style="-fx-font-weight: bold;"/>
+            <Label text="Čia bus parodytas atkurtas pradinis tekstas."
+                   wrapText="true"/>
+
+            <TextArea fx:id="decryptedTextArea"
+                      editable="false"
+                      prefRowCount="4"
+                      wrapText="true"/>
+
+            <Separator/>
+
+            <!-- 3. MATEMATINĖ RSA ATAKA -->
+            <Label text="3. Matematinės RSA atakos demonstravimas"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <Label text="Šioje dalyje parodoma, kaip iš viešo rakto galima bandyti atkurti privatų raktą, jei naudojami per maži pirminiai skaičiai."
+                   wrapText="true"/>
+
+            <GridPane hgap="10" vgap="10">
+
+                <Label text="Viešasis modulis n:"
+                       GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="attackNField"
+                           editable="false"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Viešasis eksponentas e:"
+                       GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="attackEField"
+                           editable="false"
+                           GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Rastas p:"
+                       GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="recoveredPField"
+                           editable="false"
+                           GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Rastas q:"
+                       GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="recoveredQField"
+                           editable="false"
+                           GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Apskaičiuota Φ:"
+                       GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextField fx:id="recoveredPhiField"
+                           editable="false"
+                           GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                <Label text="Atkurtas privatus raktas d:"
+                       GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <TextField fx:id="recoveredDField"
+                           editable="false"
+                           GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            </GridPane>
+
+            <HBox spacing="10">
+                <Button fx:id="recoverPrivateKeyButton"
+                        text="Atkurti privatų raktą"
+                        onAction="#handleRecoverPrivateKey"/>
+                <Button fx:id="attackDecryptButton"
+                        text="Dešifruoti naudojant atkurtą raktą"/>
+            </HBox>
+
+            <Label text="Atakos metu atkurtas tekstas:"
+                   style="-fx-font-weight: bold;"/>
+            <Label text="Čia matysite tekstą, atkurtą po matematinės RSA atakos."
+                   wrapText="true"/>
+
+            <TextArea fx:id="attackDecryptedTextArea"
+                      editable="false"
+                      prefRowCount="4"
+                      wrapText="true"/>
+
+            <Label text="Svarbu: ši programa skirta mokomajai demonstracijai. Realiuose RSA sprendimuose naudojami labai dideli pirminiai skaičiai, todėl tokia ataka tampa praktiškai neįmanoma."
+                   wrapText="true"
+                   style="-fx-font-size: 12px; -fx-text-fill: #444444;"/>
+
+        </VBox>
+    </content>
+</ScrollPane>
