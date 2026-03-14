@@ -1,5 +1,6 @@
 package lt.viko.eif.kskrebe.rsa.service;
 
+import lt.viko.eif.kskrebe.rsa.model.PrimeFactors;
 import lt.viko.eif.kskrebe.rsa.model.RsaKeyPair;
 
 import java.math.BigInteger;
@@ -117,6 +118,38 @@ public class RsaService {
         }
 
         return decryptedText.toString();
+    }
+
+    /**
+     * Atkuria RSA privatų raktą d iš viešo rakto (n, e).
+     *
+     * <p>Metodas demonstruoja matematinę RSA ataką:</p>
+     *
+     * <ol>
+     * <li>faktorizuoja n į p ir q</li>
+     * <li>apskaičiuoja phi(n)</li>
+     * <li>apskaičiuoja privatų eksponentą d</li>
+     * </ol>
+     *
+     * <p>Veikia tik jei n yra pakankamai mažas, kad būtų galima faktorizuoti.</p>
+     *
+     * @param n RSA modulis
+     * @param e viešoji eksponentė
+     * @return atkurta privati eksponentė d
+     */
+    public BigInteger recoverPrivateKey(BigInteger n, BigInteger e) {
+
+        //pagrindinė RSA ataka
+        PrimeFactors factors = mathService.factorizeN(n);
+
+        BigInteger p = factors.getP();
+        BigInteger q = factors.getQ();
+
+        //phi atkūrimas
+        BigInteger phi = mathService.recoverPhi(p, q);
+
+        //privatus rakto radimas
+        return mathService.findPrivateExponent(e, phi);
     }
 
 }

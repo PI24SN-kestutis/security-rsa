@@ -94,4 +94,45 @@ class RsaServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> rsaService.decrypt(List.of(), keys.getD(), keys.getN()));
     }
+
+    @Test
+    void shouldRecoverPrivateKeyFromPublicKey() {
+
+        //sugeneruoja raktus
+        RsaKeyPair keys = rsaService.generateKeys(
+                BigInteger.valueOf(61),
+                BigInteger.valueOf(53)
+        );
+
+        //ataka
+        BigInteger recoveredD = rsaService.recoverPrivateKey(
+                keys.getN(),
+                keys.getE()
+        );
+
+        //tikrinam ar atkurtas d sutampa su tikruoju
+        assertEquals(keys.getD(), recoveredD);
+    }
+
+    @Test //RSA matematinės atakos demonstracija
+    void recoveredPrivateKeyShouldDecryptMessage() {
+
+        RsaKeyPair keys = rsaService.generateKeys(
+                BigInteger.valueOf(61),
+                BigInteger.valueOf(53)
+        );
+
+        String message = "RSA";
+
+        List<BigInteger> encrypted =
+                rsaService.encrypt(message, keys.getE(), keys.getN());
+
+        BigInteger recoveredD =
+                rsaService.recoverPrivateKey(keys.getN(), keys.getE());
+
+        String decrypted =
+                rsaService.decrypt(encrypted, recoveredD, keys.getN());
+
+        assertEquals(message, decrypted);
+    }
 }
