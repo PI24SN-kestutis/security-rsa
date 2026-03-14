@@ -57,4 +57,41 @@ class RsaServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> rsaService.encrypt("", keys.getE(), keys.getN()));
     }
+
+    @Test
+    void shouldDecryptEncryptedTextBackToOriginal() {
+        //sugeneruoja raktus
+        RsaKeyPair keys = rsaService.generateKeys(
+                BigInteger.valueOf(61),
+                BigInteger.valueOf(53)
+        );
+
+        String originalText = "LABAS";
+        //užšifruojamas tekstas
+        List<BigInteger> encrypted = rsaService.encrypt(
+                originalText,
+                keys.getE(),
+                keys.getN()
+        );
+        //iššifruojamas tekstas
+        String decrypted = rsaService.decrypt(
+                encrypted,
+                keys.getD(),
+                keys.getN()
+        );
+
+        //palyginamas originalus tekstas su iššifruotu tekstu
+        assertEquals(originalText, decrypted);
+    }
+
+    @Test //testas tuščiam Cipher tekstui
+    void shouldThrowExceptionWhenCipherValuesAreEmpty() {
+        RsaKeyPair keys = rsaService.generateKeys(
+                BigInteger.valueOf(61),
+                BigInteger.valueOf(53)
+        );
+
+        assertThrows(IllegalArgumentException.class,
+                () -> rsaService.decrypt(List.of(), keys.getD(), keys.getN()));
+    }
 }

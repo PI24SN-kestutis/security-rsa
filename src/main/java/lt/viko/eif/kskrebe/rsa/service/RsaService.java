@@ -84,4 +84,39 @@ public class RsaService {
         return encryptedValues;
     }
 
+    /**
+     * Dešifruoja RSA algoritmu užšifruotų reikšmių sąrašą.
+     *
+     * <p>Kiekvienai užšifruotai reikšmei taikoma formulė:</p>
+     *
+     * <pre>
+     * M = C^d mod n
+     * </pre>
+     *
+     * <p>Gauta skaitinė reikšmė paverčiama atgal į simbolį.</p>
+     *
+     * @param cipherValues užšifruotų reikšmių sąrašas
+     * @param d privatus eksponentas
+     * @param n RSA modulis
+     * @return atkurtas pradinis tekstas
+     * @throws IllegalArgumentException jei užšifruotų reikšmių sąrašas tuščias arba null
+     */
+    public String decrypt(List<BigInteger> cipherValues, BigInteger d, BigInteger n) {
+        if (cipherValues == null || cipherValues.isEmpty()) {
+            throw new IllegalArgumentException("Cipher reikšmė turi būti.");
+        }
+
+        StringBuilder decryptedText = new StringBuilder();
+
+        for (BigInteger cipherValue : cipherValues) {
+
+            //M=C^d mod n
+            BigInteger decryptedValue = cipherValue.modPow(d, n);
+            char character = (char) decryptedValue.intValue();
+            decryptedText.append(character);
+        }
+
+        return decryptedText.toString();
+    }
+
 }
