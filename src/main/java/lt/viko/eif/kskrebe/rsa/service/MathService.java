@@ -152,4 +152,41 @@ public class MathService {
 
         throw new IllegalStateException("Nepavyko rasti galiojančio viešojo laipsnio rodiklio e.");
     }
+
+    /**
+     * Apskaičiuoja privačią eksponentę d RSA algoritmui.
+     *
+     * <p>Privati eksponentė tai:</p>
+     *
+     * <pre>
+     * d * e ≡ 1 (mod phi)
+     * </pre>
+     *
+     * <p>Tai reiškia, kad d yra modulinis inversas skaičiui e
+     * pagal modulį phi.</p>
+     *
+     * <p>Šis metodas naudoja išplėstinį Euklido algoritmą
+     * modulinio inverso radimui.</p>
+     *
+     * @param e viešoji eksponentė
+     * @param phi Euler funkcijos reikšmė
+     * @return privati eksponentė d
+     * @throws IllegalArgumentException jei e ir phi nėra tarpusavyje pirminiai
+     */
+    public BigInteger findPrivateExponent(BigInteger e, BigInteger phi) {
+
+        //ar gcd(e,phi)=1
+        if (!gcd(e, phi).equals(BigInteger.ONE)) {
+            throw new IllegalArgumentException("e ir phi turi būti bendri pirminiai skaičiai.");
+        }
+
+        //Paleidžiame išplėstinį Euklido algoritmą.
+        ExtendedGcdResult result = extendedGcd(e, phi);
+
+        //x yra Bezout koeficientas.
+        BigInteger x = result.getX();
+
+        //d=x mod phi
+        return x.mod(phi);
+    }
 }

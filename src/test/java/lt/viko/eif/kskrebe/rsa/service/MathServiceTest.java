@@ -96,4 +96,29 @@ class MathServiceTest {
                 () -> mathService.findPublicExponent(BigInteger.TWO));
     }
 
+    @Test
+    void shouldFindPrivateExponent() {
+
+        BigInteger phi = BigInteger.valueOf(3120);
+        BigInteger e = BigInteger.valueOf(17);
+
+        BigInteger d = mathService.findPrivateExponent(e, phi);
+
+        BigInteger result = e.multiply(d).mod(phi);
+
+
+        //Jei metodas veikia, gausime: vieną
+        assertEquals(BigInteger.ONE, result);
+    }
+
+    @Test //blogam atvejui
+    void shouldThrowExceptionWhenNumbersAreNotCoprime() {
+
+        BigInteger e = BigInteger.valueOf(6);
+        BigInteger phi = BigInteger.valueOf(3120);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> mathService.findPrivateExponent(e, phi));
+    }
+
 }
