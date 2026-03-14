@@ -227,4 +227,31 @@ public class MathService {
 
         throw new IllegalStateException("Nepavyko suskaidyti n į du pirminius veiksnius.");
     }
+
+    /**
+     * Atkuria Euler funkcijos reikšmę phi(n) iš faktorių p ir q.
+     *
+     * <p>RSA algoritme:</p>
+     *
+     * <pre>
+     * phi(n) = (p - 1)(q - 1)
+     * </pre>
+     *
+     * <p>Šis metodas naudojamas matematinės atakos metu,
+     * kai pavyksta išskaidyti n į p ir q.</p>
+     *
+     * @param p pirmas pirminis faktorius
+     * @param q antras pirminis faktorius
+     * @return phi(n)
+     * @throws IllegalArgumentException jei p arba q nėra pirminiai
+     */
+    public BigInteger recoverPhi(BigInteger p, BigInteger q) {
+
+        if (!isPrime(p) || !isPrime(q)) {
+            throw new IllegalArgumentException("p ir q turi būti pirminiai.");
+        }
+
+        return p.subtract(BigInteger.ONE)
+                .multiply(q.subtract(BigInteger.ONE));
+    }
 }

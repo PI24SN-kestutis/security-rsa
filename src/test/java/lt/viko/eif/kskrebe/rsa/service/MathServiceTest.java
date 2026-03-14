@@ -140,4 +140,25 @@ class MathServiceTest {
                 () -> mathService.factorizeN(BigInteger.TWO));
     }
 
+    @Test
+    void shouldRecoverPhiFromPrimeFactors() {
+
+        BigInteger p = BigInteger.valueOf(61);
+        BigInteger q = BigInteger.valueOf(53);
+
+        BigInteger phi = mathService.recoverPhi(p, q);
+
+        assertEquals(BigInteger.valueOf(3120), phi);
+    }
+
+    @Test //blogos įvesties testas
+    void shouldThrowExceptionWhenFactorsAreNotPrime() {
+
+        BigInteger p = BigInteger.valueOf(10);
+        BigInteger q = BigInteger.valueOf(20);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> mathService.recoverPhi(p, q));
+    }
+
 }
